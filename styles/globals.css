@@ -1,0 +1,33 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+.signIn{
+  border: 1px solid #0070f3;
+  padding: 1rem 3rem;
+  background-color: #fefefe;
+  border-radius: 8px;
+  margin-top: 3rem;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.signIn:hover{
+  background-color: #0070f3;
+  color: #fefefe;
+}
+
