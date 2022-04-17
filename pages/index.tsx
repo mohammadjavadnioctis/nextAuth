@@ -31,7 +31,8 @@ const Home: NextPage = () => {
           {
             data === null ? 
             <>
-                      Welcome Guest
+                      Welcome Guest 
+                      
 
               <button className='signIn' onClick={()=> signIn()} >Giriş yap</button>
             </> : <>
