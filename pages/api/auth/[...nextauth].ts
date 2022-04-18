@@ -1,10 +1,11 @@
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
-import { MongoClient } from 'mongodb'
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
     // @ts-ignore
-import db from "../../../lib/mongodb"
+// import db from "../../../lib/mongodb"
+import clientPromise from '../../../lib/mongodb'
+
 const options = {
   
 }
@@ -25,22 +26,25 @@ export default NextAuth({
           },
         }),
         CredentialsProvider({
-          // The name to display on the sign in form (e.g. "Sign in with...")
           name: "Credentials",
-          // The credentials is used to generate a suitable form on the sign in page.
-          // You can specify whatever fields you are expecting to be submitted.
-          // e.g. domain, username, password, 2FA token, etc.
-          // You can pass any HTML attribute to the <input> tag through the object.
+        
           credentials: {
             username: { label: "Username", type: "text", placeholder: "jsmith" },
             password: {  label: "Password", type: "password" }
           },
+          
           async authorize(credentials, req) {
-            // Add logic here to look up the user from the credentials supplied
             console.log('here is the credentials :', credentials)
+            const db =  (await clientPromise).db()
+            const fetchedUser = (await db.collection('users').find({name: credentials?.username}).toArray())[0]
+            console.log('here is the FetchedUser:', fetchedUser)
             const user = { id: 1, name: credentials?.username , pass: credentials?.password }
-            const alreadyRegeisteredUser = { id: 1, name: 'john', email: 'john@gmail.com', pass: '123123'}
-            if (user.name === alreadyRegeisteredUser.name && user.pass === alreadyRegeisteredUser.pass ) {
+          //@ts-ignore
+            // if(credentials.csrfToken !== alreadyRegeisteredUser.csrfToken){
+            //   console.log('tokens did not match')
+              
+            // }
+            if (user.name === fetchedUser?.name && user.pass === fetchedUser?.password ) {
 
               // Any object returned will be saved in `user` property of the JWT
               return user
@@ -61,7 +65,7 @@ export default NextAuth({
           
       },
           // @ts-ignore
-      adapter: MongoDBAdapter(db),
+      adapter: MongoDBAdapter(clientPromise),
 
       secret: process.env.SECRET,
       callbacks: {

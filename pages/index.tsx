@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Navbar from '../components/navbar/Navbar'
@@ -61,5 +61,17 @@ const Home: NextPage = () => {
     </div>
   )
 }
+
+
+export const getServerSideProps: GetServerSideProps = async (context ) => {
+  const fetched = await fetch('http://localhost:3000/api/authentication/signIn')
+   const jsoned = fetched.json()
+    console.log( "this is the fetched ftom the index.tsx", jsoned )
+    return {
+      props: {} ,
+    }
+  }
+  
+
 
 export default Home
